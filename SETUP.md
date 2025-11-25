@@ -167,7 +167,9 @@ After setting up the database, you can use these demo accounts:
 | Admin | admin@logistics.com | admin123 |
 | Driver | driver@example.com | driver123 |
 | Customer | customer@example.com | customer123 |
-
+Admin: admin@logistics.com / admin123
+Driver: driver@example.com / driver123
+Customer: customer@example.com / customer123
 ## 🐛 Troubleshooting
 
 ### Common Issues

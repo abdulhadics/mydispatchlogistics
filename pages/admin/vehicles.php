@@ -70,7 +70,8 @@ try {
                             <td>
                                 <div class="owner-info">
                                     <div><?php echo htmlspecialchars($vehicle['owner_name'] ?? 'N/A'); ?></div>
-                                    <div class="owner-email"><?php echo htmlspecialchars($vehicle['owner_email'] ?? ''); ?></div>
+                                    <div class="owner-email"><?php echo htmlspecialchars($vehicle['owner_email'] ?? ''); ?>
+                                    </div>
                                 </div>
                             </td>
                             <td>
@@ -89,7 +90,8 @@ try {
                                     <button class="btn btn-sm btn-outline" onclick="editVehicle(<?php echo $vehicle['id']; ?>)">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger" onclick="deleteVehicle(<?php echo $vehicle['id']; ?>)">
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="deleteVehicle(<?php echo $vehicle['id']; ?>)">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -102,63 +104,20 @@ try {
     </div>
 </div>
 
-<style>
-.vehicle-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
 
-.vehicle-year {
-    font-size: 0.875rem;
-    color: #737373;
-}
-
-.owner-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.owner-email {
-    font-size: 0.875rem;
-    color: #737373;
-}
-
-.status-available {
-    background: rgba(16, 185, 129, 0.1);
-    color: #6ee7b7;
-}
-
-.status-in-use {
-    background: rgba(59, 130, 246, 0.1);
-    color: #93c5fd;
-}
-
-.status-maintenance {
-    background: rgba(245, 158, 11, 0.1);
-    color: #fcd34d;
-}
-
-.status-out-of-service {
-    background: rgba(239, 68, 68, 0.1);
-    color: #fca5a5;
-}
-</style>
 
 <script>
-function showAddVehicleModal() {
-    alert('Add Vehicle functionality - To be implemented with backend API');
-}
-
-function editVehicle(vehicleId) {
-    alert('Edit Vehicle ' + vehicleId + ' - To be implemented with backend API');
-}
-
-function deleteVehicle(vehicleId) {
-    if (confirm('Are you sure you want to delete this vehicle?')) {
-        alert('Delete Vehicle ' + vehicleId + ' - To be implemented with backend API');
+    function showAddVehicleModal() {
+        alert('Add Vehicle functionality - To be implemented with backend API');
     }
-}
-</script>
 
+    function editVehicle(vehicleId) {
+        alert('Edit Vehicle ' + vehicleId + ' - To be implemented with backend API');
+    }
+
+    function deleteVehicle(vehicleId) {
+        if (confirm('Are you sure you want to delete this vehicle?')) {
+            alert('Delete Vehicle ' + vehicleId + ' - To be implemented with backend API');
+        }
+    }
+</script>

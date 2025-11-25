@@ -66,13 +66,15 @@ try {
                             <td>
                                 <div class="user-info">
                                     <div><?php echo htmlspecialchars($message['sender_name'] ?? 'N/A'); ?></div>
-                                    <div class="user-email"><?php echo htmlspecialchars($message['sender_email'] ?? ''); ?></div>
+                                    <div class="user-email"><?php echo htmlspecialchars($message['sender_email'] ?? ''); ?>
+                                    </div>
                                 </div>
                             </td>
                             <td>
                                 <div class="user-info">
                                     <div><?php echo htmlspecialchars($message['recipient_name'] ?? 'N/A'); ?></div>
-                                    <div class="user-email"><?php echo htmlspecialchars($message['recipient_email'] ?? ''); ?></div>
+                                    <div class="user-email"><?php echo htmlspecialchars($message['recipient_email'] ?? ''); ?>
+                                    </div>
                                 </div>
                             </td>
                             <td><?php echo htmlspecialchars($message['subject'] ?? 'No subject'); ?></td>
@@ -95,7 +97,8 @@ try {
                                     <button class="btn btn-sm btn-outline" onclick="viewMessage(<?php echo $message['id']; ?>)">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger" onclick="deleteMessage(<?php echo $message['id']; ?>)">
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="deleteMessage(<?php echo $message['id']; ?>)">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -108,56 +111,16 @@ try {
     </div>
 </div>
 
-<style>
-.unread {
-    background: rgba(139, 92, 246, 0.05);
-}
 
-.user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.user-email {
-    font-size: 0.875rem;
-    color: #737373;
-}
-
-.message-preview {
-    max-width: 200px;
-    font-size: 0.875rem;
-    color: #a3a3a3;
-}
-
-.read-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
-
-.read-badge.read {
-    background: rgba(16, 185, 129, 0.1);
-    color: #6ee7b7;
-}
-
-.read-badge.unread {
-    background: rgba(139, 92, 246, 0.1);
-    color: #c4b5fd;
-}
-</style>
 
 <script>
-function viewMessage(messageId) {
-    alert('View Message ' + messageId + ' - To be implemented with modal');
-}
-
-function deleteMessage(messageId) {
-    if (confirm('Are you sure you want to delete this message?')) {
-        alert('Delete Message ' + messageId + ' - To be implemented with backend API');
+    function viewMessage(messageId) {
+        alert('View Message ' + messageId + ' - To be implemented with modal');
     }
-}
-</script>
 
+    function deleteMessage(messageId) {
+        if (confirm('Are you sure you want to delete this message?')) {
+            alert('Delete Message ' + messageId + ' - To be implemented with backend API');
+        }
+    }
+</script>

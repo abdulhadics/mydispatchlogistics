@@ -106,62 +106,20 @@ try {
     </div>
 </div>
 
-<style>
-.route-info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-}
 
-.route-from, .route-to {
-    color: #a3a3a3;
-}
-
-.date-info {
-    font-size: 0.875rem;
-    color: #a3a3a3;
-}
-
-.status-available {
-    background: rgba(59, 130, 246, 0.1);
-    color: #93c5fd;
-}
-
-.status-assigned {
-    background: rgba(245, 158, 11, 0.1);
-    color: #fcd34d;
-}
-
-.status-in_transit {
-    background: rgba(139, 92, 246, 0.1);
-    color: #c4b5fd;
-}
-
-.status-delivered {
-    background: rgba(16, 185, 129, 0.1);
-    color: #6ee7b7;
-}
-
-.status-cancelled {
-    background: rgba(239, 68, 68, 0.1);
-    color: #fca5a5;
-}
-</style>
 
 <script>
-function showAddLoadModal() {
-    alert('Add Load functionality - To be implemented with backend API');
-}
-
-function editLoad(loadId) {
-    alert('Edit Load ' + loadId + ' - To be implemented with backend API');
-}
-
-function deleteLoad(loadId) {
-    if (confirm('Are you sure you want to delete this load?')) {
-        alert('Delete Load ' + loadId + ' - To be implemented with backend API');
+    function showAddLoadModal() {
+        alert('Add Load functionality - To be implemented with backend API');
     }
-}
-</script>
 
+    function editLoad(loadId) {
+        alert('Edit Load ' + loadId + ' - To be implemented with backend API');
+    }
+
+    function deleteLoad(loadId) {
+        if (confirm('Are you sure you want to delete this load?')) {
+            alert('Delete Load ' + loadId + ' - To be implemented with backend API');
+        }
+    }
+</script>

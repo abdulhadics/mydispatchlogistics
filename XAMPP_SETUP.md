@@ -3,6 +3,7 @@
 Complete step-by-step guide to run this project using XAMPP.
 
 ## 📋 Prerequisites
+ php -S localhost:8000
 
 - XAMPP installed on your Windows machine
 - Download from: https://www.apachefriends.org/download.html
@@ -105,6 +106,24 @@ C:\xampp\htdocs\
    - Navigate to: `C:\xampp\htdocs\htmlstore-truck\config\config.php`
    - Open with Notepad++ or any text editor
 
+Step : Start PHP’s built-in server
+
+Run:
+
+php -S localhost:8000
+
+
+You should see output like:
+
+PHP 8.x Development Server (http://localhost:8000) started
+tep 3: Open in browser
+
+Go to:
+
+http://localhost:8000
+
+
+✅ Your site should now work exactly like before — no need for XAMPP or htdocs.
 2. Update the APP_URL:
    ```php
    // Change this line:

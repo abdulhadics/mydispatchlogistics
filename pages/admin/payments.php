@@ -84,7 +84,8 @@ try {
                                     <button class="btn btn-sm btn-outline" onclick="editPayment(<?php echo $payment['id']; ?>)">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-primary" onclick="processPayment(<?php echo $payment['id']; ?>)">
+                                    <button class="btn btn-sm btn-primary"
+                                        onclick="processPayment(<?php echo $payment['id']; ?>)">
                                         <i class="fas fa-check"></i>
                                     </button>
                                 </div>
@@ -97,49 +98,20 @@ try {
     </div>
 </div>
 
-<style>
-.type-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
 
-.type-advance {
-    background: rgba(59, 130, 246, 0.1);
-    color: #93c5fd;
-}
-
-.type-final {
-    background: rgba(16, 185, 129, 0.1);
-    color: #6ee7b7;
-}
-
-.type-bonus {
-    background: rgba(245, 158, 11, 0.1);
-    color: #fcd34d;
-}
-
-.type-deduction {
-    background: rgba(239, 68, 68, 0.1);
-    color: #fca5a5;
-}
-</style>
 
 <script>
-function showAddPaymentModal() {
-    alert('Add Payment functionality - To be implemented with backend API');
-}
-
-function editPayment(paymentId) {
-    alert('Edit Payment ' + paymentId + ' - To be implemented with backend API');
-}
-
-function processPayment(paymentId) {
-    if (confirm('Mark this payment as completed?')) {
-        alert('Process Payment ' + paymentId + ' - To be implemented with backend API');
+    function showAddPaymentModal() {
+        alert('Add Payment functionality - To be implemented with backend API');
     }
-}
-</script>
 
+    function editPayment(paymentId) {
+        alert('Edit Payment ' + paymentId + ' - To be implemented with backend API');
+    }
+
+    function processPayment(paymentId) {
+        if (confirm('Mark this payment as completed?')) {
+            alert('Process Payment ' + paymentId + ' - To be implemented with backend API');
+        }
+    }
+</script>

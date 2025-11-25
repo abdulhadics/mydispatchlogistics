@@ -26,7 +26,7 @@ include 'includes/header.php';
         </div>
 
         <!-- Signup Form -->
-        <form id="signupForm" class="signup-form" method="POST" action="functions/auth.php">
+        <form id="signupForm" class="signup-form" method="POST" action="/functions/auth.php">
             <input type="hidden" name="action" value="signup">
             <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
             

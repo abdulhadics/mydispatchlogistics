@@ -5,13 +5,49 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/helpers_simple.php';
 
+// Get base URL dynamically - works from any context
+function getBaseUrl() {
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'];
+    
+    // Get the script that was originally requested (usually index.php)
+    // When auth.php is called via form POST, SCRIPT_NAME will be the path to auth.php
+    $scriptPath = $_SERVER['SCRIPT_NAME'];
+    
+    // If we're in functions/auth.php, go up two levels to get to root
+    // dirname() once: /functions, dirname() twice: root
+    $rootPath = dirname(dirname($scriptPath));
+    
+    // Normalize path separators
+    $rootPath = str_replace('\\', '/', $rootPath);
+    
+    // Clean up - if we're at document root, rootPath might be '/' or '.'
+    if ($rootPath === '/' || $rootPath === '.' || $rootPath === '\\' || empty($rootPath)) {
+        $rootPath = '';
+    }
+    
+    // Build the base URL
+    $baseUrl = $protocol . '://' . $host;
+    if (!empty($rootPath) && $rootPath !== '/') {
+        $baseUrl .= $rootPath;
+    }
+    
+    return rtrim($baseUrl, '/');
+}
+
 // Determine if this is a form submission or JSON API call
 $isFormSubmission = !empty($_POST);
 $isJsonRequest = !empty($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false;
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+// Allow GET for check action only
+$action = $_GET['action'] ?? $_POST['action'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'check') {
+    // This is handled below, continue
+} elseif ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     if ($isFormSubmission) {
-        header('Location: ' . APP_URL . '/?page=signup&error=' . urlencode('Method not allowed'));
+        $baseUrl = getBaseUrl();
+        $redirectUrl = $baseUrl . '/index.php?page=signup&error=' . urlencode('Method not allowed');
+        header('Location: ' . $redirectUrl);
     } else {
         http_response_code(405);
         header('Content-Type: application/json');
@@ -21,6 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Get input data from either form POST or JSON
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'check') {
+    // Handle check action via GET
+    checkAuthStatus();
+    exit();
+}
+
 if ($isFormSubmission) {
     $input = $_POST;
     // For form submissions, we'll redirect instead of returning JSON
@@ -33,6 +75,9 @@ $action = $input['action'] ?? '';
 
 try {
     $db = getDB();
+    
+    // If database connection failed, $db will be null
+    // The handlers will fall back to demo users
     
     switch ($action) {
         case 'login':
@@ -57,7 +102,9 @@ try {
 } catch (Exception $e) {
     if ($isFormSubmission) {
         $errorPage = ($action === 'login') ? 'login' : 'signup';
-        header('Location: ' . APP_URL . '/?page=' . $errorPage . '&error=' . urlencode($e->getMessage()));
+        $baseUrl = getBaseUrl();
+        $redirectUrl = $baseUrl . '/index.php?page=' . $errorPage . '&error=' . urlencode($e->getMessage());
+        header('Location: ' . $redirectUrl);
     } else {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
@@ -74,51 +121,55 @@ function handleLogin($db, $input, $isFormSubmission = false) {
         throw new Exception('Email and password are required');
     }
     
-    // Try database first
-    try {
-        $stmt = $db->prepare("SELECT * FROM users WHERE email = ? AND status = 'active'");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Try database first (if available)
+    if ($db) {
+        try {
+            $stmt = $db->prepare("SELECT * FROM users WHERE email = ? AND status = 'active'");
+            $stmt->execute([$email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        if ($user && password_verify($password, $user['password'])) {
-            // Update last login
-            $stmt = $db->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
-            $stmt->execute([$user['id']]);
-            
-            // Set session variables
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_role'] = $user['role'];
-            $_SESSION['login_time'] = time();
-            
-            // Set remember me cookie if requested
-            if ($rememberMe) {
-                $token = bin2hex(random_bytes(32));
-                setcookie('remember_token', $token, time() + (30 * 24 * 60 * 60), '/', '', false, true);
+            if ($user && password_verify($password, $user['password'])) {
+                // Update last login
+                $stmt = $db->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
+                $stmt->execute([$user['id']]);
+                
+                // Set session variables
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_name'] = $user['name'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_role'] = $user['role'];
+                $_SESSION['login_time'] = time();
+                
+                // Set remember me cookie if requested
+                if ($rememberMe) {
+                    $token = bin2hex(random_bytes(32));
+                    setcookie('remember_token', $token, time() + (30 * 24 * 60 * 60), '/', '', false, true);
+                }
+                
+                if ($isFormSubmission) {
+                    // Redirect based on role
+                    $redirect = ($user['role'] === 'admin') ? 'admin' : 'dashboard';
+                    $baseUrl = getBaseUrl();
+                    $redirectUrl = $baseUrl . '/index.php?page=' . $redirect;
+                    header('Location: ' . $redirectUrl);
+                    exit();
+                } else {
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Login successful',
+                        'user' => [
+                            'id' => $user['id'],
+                            'name' => $user['name'],
+                            'email' => $user['email'],
+                            'role' => $user['role']
+                        ]
+                    ]);
+                }
+                return;
             }
-            
-            if ($isFormSubmission) {
-                // Redirect based on role
-                $redirect = ($user['role'] === 'admin') ? 'admin' : 'dashboard';
-                header('Location: ' . APP_URL . '/?page=' . $redirect);
-                exit();
-            } else {
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Login successful',
-                    'user' => [
-                        'id' => $user['id'],
-                        'name' => $user['name'],
-                        'email' => $user['email'],
-                        'role' => $user['role']
-                    ]
-                ]);
-            }
-            return;
+        } catch (Exception $e) {
+            // Fall through to demo users if database fails
         }
-    } catch (Exception $e) {
-        // Fall through to demo users if database fails
     }
     
     // Fallback to demo users for development
@@ -158,7 +209,9 @@ function handleLogin($db, $input, $isFormSubmission = false) {
         
         if ($isFormSubmission) {
             $redirect = ($user['role'] === 'admin') ? 'admin' : 'dashboard';
-            header('Location: ' . APP_URL . '/?page=' . $redirect);
+            $baseUrl = getBaseUrl();
+            $redirectUrl = $baseUrl . '/index.php?page=' . $redirect;
+            header('Location: ' . $redirectUrl);
             exit();
         } else {
             echo json_encode([
@@ -204,46 +257,106 @@ function handleSignup($db, $input, $isFormSubmission = false) {
         throw new Exception('Password must be at least 6 characters');
     }
     
-    // Check if user already exists
-    $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    
-    if ($stmt->fetch()) {
-        throw new Exception('User with this email already exists');
-    }
-    
-    // Create new user
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    
-    $stmt = $db->prepare("INSERT INTO users (name, email, password, role, phone, company, mc_number, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', NOW())");
-    $result = $stmt->execute([$name, $email, $hashedPassword, $role, $phone, $company, $mc_number]);
-    
-    if ($result) {
-        // Auto-login the user
-        $userId = $db->lastInsertId();
-        $_SESSION['user_id'] = $userId;
+    // Try to save to database if available
+    if ($db) {
+        try {
+            // Check if user already exists
+            $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            
+            if ($stmt->fetch()) {
+                throw new Exception('User with this email already exists');
+            }
+            
+            // Create new user
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            
+            $stmt = $db->prepare("INSERT INTO users (name, email, password, role, phone, company, mc_number, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', NOW())");
+            $result = $stmt->execute([$name, $email, $hashedPassword, $role, $phone, $company, $mc_number]);
+            
+            if ($result) {
+                // Auto-login the user
+                $userId = $db->lastInsertId();
+                $_SESSION['user_id'] = $userId;
+                $_SESSION['user_name'] = $name;
+                $_SESSION['user_email'] = $email;
+                $_SESSION['user_role'] = $role;
+                $_SESSION['login_time'] = time();
+                
+                if ($isFormSubmission) {
+                    $baseUrl = getBaseUrl();
+                    $redirectUrl = $baseUrl . '/index.php?page=dashboard&success=' . urlencode('Account created successfully!');
+                    header('Location: ' . $redirectUrl);
+                    exit();
+                } else {
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Account created successfully',
+                        'user' => [
+                            'id' => $userId,
+                            'name' => $name,
+                            'email' => $email,
+                            'role' => $role
+                        ]
+                    ]);
+                }
+                return;
+            } else {
+                throw new Exception('Failed to create account');
+            }
+        } catch (Exception $e) {
+            // If database fails, still allow signup but show message
+            // For demo purposes, we'll create a session anyway
+            $_SESSION['user_id'] = time(); // Temporary ID
+            $_SESSION['user_name'] = $name;
+            $_SESSION['user_email'] = $email;
+            $_SESSION['user_role'] = $role;
+            $_SESSION['login_time'] = time();
+            
+            if ($isFormSubmission) {
+                $baseUrl = getBaseUrl();
+                $redirectUrl = $baseUrl . '/index.php?page=dashboard&success=' . urlencode('Account created! (Demo mode - database not available)');
+                header('Location: ' . $redirectUrl);
+                exit();
+            } else {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Account created (demo mode)',
+                    'user' => [
+                        'id' => $_SESSION['user_id'],
+                        'name' => $name,
+                        'email' => $email,
+                        'role' => $role
+                    ]
+                ]);
+            }
+            return;
+        }
+    } else {
+        // No database - create demo session
+        $_SESSION['user_id'] = time();
         $_SESSION['user_name'] = $name;
         $_SESSION['user_email'] = $email;
         $_SESSION['user_role'] = $role;
         $_SESSION['login_time'] = time();
         
         if ($isFormSubmission) {
-            header('Location: ' . APP_URL . '/?page=dashboard&success=' . urlencode('Account created successfully!'));
+            $baseUrl = getBaseUrl();
+            $redirectUrl = $baseUrl . '/index.php?page=dashboard&success=' . urlencode('Account created! (Demo mode)');
+            header('Location: ' . $redirectUrl);
             exit();
         } else {
             echo json_encode([
                 'success' => true,
-                'message' => 'Account created successfully',
+                'message' => 'Account created (demo mode)',
                 'user' => [
-                    'id' => $userId,
+                    'id' => $_SESSION['user_id'],
                     'name' => $name,
                     'email' => $email,
                     'role' => $role
                 ]
             ]);
         }
-    } else {
-        throw new Exception('Failed to create account');
     }
 }
 
@@ -256,7 +369,9 @@ function handleLogout($isFormSubmission = false) {
     setcookie('remember_token', '', time() - 3600, '/', '', false, true);
     
     if ($isFormSubmission) {
-        header('Location: ' . APP_URL . '/?page=home');
+        $baseUrl = getBaseUrl();
+        $redirectUrl = $baseUrl . '/index.php?page=home';
+        header('Location: ' . $redirectUrl);
         exit();
     } else {
         echo json_encode([

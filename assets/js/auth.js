@@ -2,14 +2,23 @@
 
 // Login form handling
 document.addEventListener('DOMContentLoaded', function() {
+    // Don't intercept forms that have auth.php as action - let them submit normally
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
-        loginForm.addEventListener('submit', handleLogin);
+        const formAction = loginForm.getAttribute('action') || loginForm.action;
+        // Only use AJAX if form doesn't have a proper action pointing to auth.php
+        if (!formAction || !formAction.includes('auth.php')) {
+            loginForm.addEventListener('submit', handleLogin);
+        }
     }
     
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
-        signupForm.addEventListener('submit', handleSignup);
+        const formAction = signupForm.getAttribute('action') || signupForm.action;
+        // Only use AJAX if form doesn't have a proper action pointing to auth.php
+        if (!formAction || !formAction.includes('auth.php')) {
+            signupForm.addEventListener('submit', handleSignup);
+        }
     }
     
     const logoutLinks = document.querySelectorAll('a[href*="logout"]');
