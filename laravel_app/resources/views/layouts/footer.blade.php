@@ -23,20 +23,20 @@
             <div class="footer-section">
                 <h3 class="footer-title">Services</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Load Dispatching</a></li>
-                    <li><a href="#">Fleet Management</a></li>
-                    <li><a href="#">Real-time Tracking</a></li>
-                    <li><a href="#">Payment Processing</a></li>
+                    <li><a href="{{ route('services') }}">Load Dispatching</a></li>
+                    <li><a href="{{ route('fleet') }}">Fleet Management</a></li>
+                    <li><a href="{{ route('tracking') }}">Real-time Tracking</a></li>
+                    <li><a href="{{ route('services') }}">Payment Processing</a></li>
                 </ul>
             </div>
 
             <div class="footer-section">
                 <h3 class="footer-title">Company</h3>
                 <ul class="footer-links">
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Pricing</a></li>
+                    <li><a href="{{ route('about') }}">About Us</a></li>
+                    <li><a href="{{ route('contact') }}">Contact</a></li>
+                    <li><a href="{{ route('blog') }}">Blog</a></li>
+                    <li><a href="{{ route('pricing') }}">Pricing</a></li>
                 </ul>
             </div>
 
