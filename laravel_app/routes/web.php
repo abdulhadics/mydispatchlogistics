@@ -25,6 +25,10 @@ use App\Http\Controllers\TrackingController;
 
 Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking');
 Route::post('/tracking', [TrackingController::class, 'track'])->name('tracking.track');
+
+use App\Http\Controllers\DocumentsController;
+Route::get('/documents/{type}', [DocumentsController::class, 'view'])->name('documents.view');
+
 Route::view('/about', 'about')->name('about');
 Route::view('/blog', 'blog')->name('blog');
 
