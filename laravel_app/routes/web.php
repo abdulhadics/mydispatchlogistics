@@ -19,7 +19,12 @@ Route::get('/', function () {
 Route::view('/services', 'services')->name('services');
 Route::view('/pricing', 'pricing')->name('pricing');
 Route::view('/fleet', 'fleet')->name('fleet');
-Route::view('/tracking', 'tracking')->name('tracking');
+use App\Http\Controllers\TrackingController;
+
+// ...
+
+Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking');
+Route::post('/tracking', [TrackingController::class, 'track'])->name('tracking.track');
 Route::view('/about', 'about')->name('about');
 Route::view('/blog', 'blog')->name('blog');
 

@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'shippo' => [
+        'key' => env('SHIPPO_API_KEY'),
+    ],
+
 ];
