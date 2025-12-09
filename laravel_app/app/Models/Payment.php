@@ -21,9 +21,9 @@ class Payment extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function load()
+    public function loadData()
     {
-        return $this->belongsTo(Load::class);
+        return $this->belongsTo(Load::class, 'load_id');
     }
 
     public function driver()
