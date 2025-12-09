@@ -1,373 +1,165 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('title', 'Sign Up - MyDispatch')
-@section('description', 'Create your MyDispatch account to start managing your logistics operations.')
-@section('body_class', 'signup-page')
 
 @section('content')
-    <div class="signup-container">
-        <div class="signup-card">
-            <!-- Logo and Header -->
-            <div class="signup-header">
-                <div class="signup-logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-truck"></i>
-                    </div>
-                </div>
-                <h1 class="signup-title">Create Account</h1>
-                <p class="signup-subtitle">Join MyDispatch and start your logistics journey</p>
-            </div>
-
-            <!-- Signup Form -->
-            <form id="signupForm" class="signup-form" method="POST" action="{{ route('signup') }}">
-                @csrf
-
-                @if ($errors->any())
-                    <div class="alert alert-error">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <span>{{ $errors->first() }}</span>
-                    </div>
-                @endif
-
-                <!-- Name Field -->
-                <div class="form-group">
-                    <label for="name" class="form-label">Full Name</label>
-                    <div class="input-group">
-                        <div class="input-icon">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name"
-                            value="{{ old('name') }}" required autocomplete="name">
-                    </div>
-                </div>
-
-                <!-- Email Field -->
-                <div class="form-group">
-                    <label for="email" class="form-label">Email Address</label>
-                    <div class="input-group">
-                        <div class="input-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email"
-                            value="{{ old('email') }}" required autocomplete="email">
-                    </div>
-                </div>
-
-                <!-- Phone Field -->
-                <div class="form-group">
-                    <label for="phone" class="form-label">Phone Number</label>
-                    <div class="input-group">
-                        <div class="input-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <input type="tel" id="phone" name="phone" class="form-input" placeholder="Enter your phone number"
-                            value="{{ old('phone') }}" autocomplete="tel">
-                    </div>
-                </div>
-
-                <!-- Role Selection -->
-                <div class="form-group">
-                    <label for="role" class="form-label">Account Type</label>
-                    <div class="input-group">
-                        <div class="input-icon">
-                            <i class="fas fa-user-tag"></i>
-                        </div>
-                        <select id="role" name="role" class="form-input" required>
-                            <option value="">Select account type</option>
-                            <option value="driver" {{ old('role') === 'driver' ? 'selected' : '' }}>Driver/Owner Operator
-                            </option>
-                            <option value="customer" {{ old('role') === 'customer' ? 'selected' : '' }}>Customer/Shipper
-                            </option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Company Field (conditional) -->
-                <div class="form-group" id="companyGroup" style="display: none;">
-                    <label for="company" class="form-label">Company Name</label>
-                    <div class="input-group">
-                        <div class="input-icon">
-                            <i class="fas fa-building"></i>
-                        </div>
-                        <input type="text" id="company" name="company" class="form-input"
-                            placeholder="Enter your company name" value="{{ old('company') }}">
-                    </div>
-                </div>
-
-                <!-- MC Number (for drivers) -->
-                <div class="form-group" id="mcNumberGroup" style="display: none;">
-                    <label for="mc_number" class="form-label">MC Number</label>
-                    <div class="input-group">
-                        <div class="input-icon">
-                            <i class="fas fa-id-card"></i>
-                        </div>
-                        <input type="text" id="mc_number" name="mc_number" class="form-input"
-                            placeholder="Enter your MC number" value="{{ old('mc_number') }}">
-                    </div>
-                </div>
-
-                <!-- Password Field -->
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-group">
-                        <div class="input-icon">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <input type="password" id="password" name="password" class="form-input"
-                            placeholder="Create a password" required autocomplete="new-password">
-                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Confirm Password Field -->
-                <div class="form-group">
-                    <label for="password_confirmation" class="form-label">Confirm Password</label>
-                    <div class="input-group">
-                        <div class="input-icon">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <input type="password" id="password_confirmation" name="password_confirmation" class="form-input"
-                            placeholder="Confirm your password" required autocomplete="new-password">
-                        <button type="button" class="password-toggle"
-                            onclick="togglePasswordVisibility('password_confirmation')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Terms and Conditions -->
-                <div class="form-group">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="terms" name="terms" class="checkbox" required>
-                        <label for="terms" class="checkbox-label">
-                            I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#"
-                                class="terms-link">Privacy Policy</a>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Signup Button -->
-                <button type="submit" class="btn btn-primary btn-full">
-                    <i class="fas fa-user-plus"></i>
-                    Create Account
-                </button>
-
-                <!-- Login Link -->
-                <div class="signup-footer">
-                    <p>Already have an account?
-                        <a href="{{ route('login') }}" class="login-link">Sign in here</a>
-                    </p>
-                </div>
-            </form>
-        </div>
+    <div class="auth-header">
+        <h2>Create Account</h2>
+        <p>Join MyDispatch and start your logistics journey.</p>
     </div>
 
-    <style>
-        .signup-page {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            padding: 2rem 0;
-        }
+    <form method="POST" action="{{ route('signup') }}" class="signup-form">
+        @csrf
 
-        .signup-page::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
-            pointer-events: none;
-        }
+        @if ($errors->any())
+            <div class="alert alert-error mb-4"
+                style="background: rgba(220, 38, 38, 0.1); border: 1px solid rgba(220, 38, 38, 0.2); color: #fca5a5; padding: 1rem; border-radius: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fas fa-exclamation-circle text-red-500"></i>
+                <span>{{ $errors->first() }}</span>
+            </div>
+        @endif
 
-        .signup-container {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            max-width: 500px;
-            padding: 2rem;
-        }
+        <!-- Name -->
+        <div class="form-group mb-4">
+            <label for="name" class="form-label"
+                style="display: block; color: #d1d5db; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500;">Full
+                Name</label>
+            <div class="input-group" style="position: relative;">
+                <i class="fas fa-user"
+                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
+                <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name"
+                    value="{{ old('name') }}" required autocomplete="name"
+                    style="width: 100%; background: #1f2937; border: 1px solid #374151; color: white; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 0.5rem; outline: none; transition: all 0.2s;">
+            </div>
+        </div>
 
-        .signup-card {
-            background: rgba(23, 23, 23, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(38, 38, 38, 0.8);
-            border-radius: 24px;
-            padding: 3rem 2rem;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-        }
+        <!-- Email -->
+        <div class="form-group mb-4">
+            <label for="email" class="form-label"
+                style="display: block; color: #d1d5db; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500;">Email
+                Address</label>
+            <div class="input-group" style="position: relative;">
+                <i class="fas fa-envelope"
+                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
+                <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email"
+                    value="{{ old('email') }}" required autocomplete="email"
+                    style="width: 100%; background: #1f2937; border: 1px solid #374151; color: white; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 0.5rem; outline: none; transition: all 0.2s;">
+            </div>
+        </div>
 
-        .signup-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
+        <!-- Phone -->
+        <div class="form-group mb-4">
+            <label for="phone" class="form-label"
+                style="display: block; color: #d1d5db; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500;">Phone
+                Number</label>
+            <div class="input-group" style="position: relative;">
+                <i class="fas fa-phone"
+                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
+                <input type="tel" id="phone" name="phone" class="form-input" placeholder="Enter your phone number"
+                    value="{{ old('phone') }}" autocomplete="tel"
+                    style="width: 100%; background: #1f2937; border: 1px solid #374151; color: white; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 0.5rem; outline: none; transition: all 0.2s;">
+            </div>
+        </div>
 
-        .signup-logo {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
+        <!-- Role -->
+        <div class="form-group mb-4">
+            <label for="role" class="form-label"
+                style="display: block; color: #d1d5db; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500;">Account
+                Type</label>
+            <div class="input-group" style="position: relative;">
+                <i class="fas fa-user-tag"
+                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
+                <select id="role" name="role" class="form-input" required
+                    style="width: 100%; background: #1f2937; border: 1px solid #374151; color: white; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 0.5rem; outline: none; transition: all 0.2s; appearance: none;">
+                    <option value="">Select account type</option>
+                    <option value="driver" {{ old('role') === 'driver' ? 'selected' : '' }}>Driver/Owner Operator</option>
+                    <option value="customer" {{ old('role') === 'customer' ? 'selected' : '' }}>Customer/Shipper</option>
+                </select>
+                <i class="fas fa-chevron-down"
+                    style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280; pointer-events: none;"></i>
+            </div>
+        </div>
 
-        .signup-logo .logo-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
-        }
+        <!-- Company (Conditional) -->
+        <div class="form-group mb-4" id="companyGroup" style="display: none;">
+            <label for="company" class="form-label"
+                style="display: block; color: #d1d5db; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500;">Company
+                Name</label>
+            <div class="input-group" style="position: relative;">
+                <i class="fas fa-building"
+                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
+                <input type="text" id="company" name="company" class="form-input" placeholder="Enter your company name"
+                    value="{{ old('company') }}"
+                    style="width: 100%; background: #1f2937; border: 1px solid #374151; color: white; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 0.5rem; outline: none; transition: all 0.2s;">
+            </div>
+        </div>
 
-        .signup-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 0%, #a855f7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
+        <!-- MC Number (Conditional) -->
+        <div class="form-group mb-4" id="mcNumberGroup" style="display: none;">
+            <label for="mc_number" class="form-label"
+                style="display: block; color: #d1d5db; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500;">MC
+                Number</label>
+            <div class="input-group" style="position: relative;">
+                <i class="fas fa-id-card"
+                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
+                <input type="text" id="mc_number" name="mc_number" class="form-input" placeholder="Enter your MC number"
+                    value="{{ old('mc_number') }}"
+                    style="width: 100%; background: #1f2937; border: 1px solid #374151; color: white; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 0.5rem; outline: none; transition: all 0.2s;">
+            </div>
+        </div>
 
-        .signup-subtitle {
-            color: #a3a3a3;
-            font-size: 1.125rem;
-        }
+        <!-- Password -->
+        <div class="form-group mb-4">
+            <label for="password" class="form-label"
+                style="display: block; color: #d1d5db; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500;">Password</label>
+            <div class="input-group" style="position: relative;">
+                <i class="fas fa-lock"
+                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Create a password"
+                    required autocomplete="new-password"
+                    style="width: 100%; background: #1f2937; border: 1px solid #374151; color: white; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 0.5rem; outline: none; transition: all 0.2s;">
+                <button type="button" onclick="togglePasswordVisibility('password')"
+                    style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #6b7280; cursor: pointer;">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+        </div>
 
-        .signup-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
+        <!-- Confirm Password -->
+        <div class="form-group mb-6">
+            <label for="password_confirmation" class="form-label"
+                style="display: block; color: #d1d5db; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500;">Confirm
+                Password</label>
+            <div class="input-group" style="position: relative;">
+                <i class="fas fa-lock"
+                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
+                <input type="password" id="password_confirmation" name="password_confirmation" class="form-input"
+                    placeholder="Confirm your password" required autocomplete="new-password"
+                    style="width: 100%; background: #1f2937; border: 1px solid #374151; color: white; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 0.5rem; outline: none; transition: all 0.2s;">
+            </div>
+        </div>
 
-        .input-group {
-            position: relative;
-        }
+        <!-- Terms -->
+        <div class="form-group mb-6">
+            <label class="flex items-start gap-2"
+                style="display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" name="terms" required
+                    style="accent-color: #8b5cf6; width: 1rem; height: 1rem; margin-top: 0.25rem;">
+                <span style="color: #9ca3af; font-size: 0.875rem; line-height: 1.4;">
+                    I agree to the <a href="#" style="color: #8b5cf6; text-decoration: none;">Terms of Service</a> and <a
+                        href="#" style="color: #8b5cf6; text-decoration: none;">Privacy Policy</a>
+                </span>
+            </label>
+        </div>
 
-        .input-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #737373;
-            z-index: 2;
-        }
+        <button type="submit" class="btn btn-primary w-full" style="width: 100%; padding: 0.875rem; font-size: 1rem;">Create
+            Account</button>
 
-        .form-input {
-            padding-left: 48px;
-            padding-right: 48px;
-            width: 100%;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #737373;
-            cursor: pointer;
-            padding: 4px;
-            transition: color 0.3s ease;
-        }
-
-        .password-toggle:hover {
-            color: #a855f7;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-
-        .checkbox {
-            width: 16px;
-            height: 16px;
-            accent-color: #a855f7;
-            margin-top: 2px;
-        }
-
-        .checkbox-label {
-            color: #a3a3a3;
-            font-size: 0.875rem;
-            cursor: pointer;
-            line-height: 1.4;
-        }
-
-        .terms-link {
-            color: #a855f7;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .terms-link:hover {
-            color: #c084fc;
-        }
-
-        .btn-full {
-            width: 100%;
-            padding: 16px;
-            font-size: 1.125rem;
-            margin-top: 1rem;
-        }
-
-        .signup-footer {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(38, 38, 38, 0.8);
-        }
-
-        .signup-footer p {
-            color: #a3a3a3;
-            margin: 0;
-        }
-
-        .login-link {
-            color: #a855f7;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .login-link:hover {
-            color: #c084fc;
-        }
-
-        @media (max-width: 480px) {
-            .signup-container {
-                padding: 1rem;
-            }
-
-            .signup-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .signup-title {
-                font-size: 2rem;
-            }
-
-            .signup-logo .logo-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+        <p class="text-center mt-6" style="text-align: center; margin-top: 1.5rem; color: #9ca3af; font-size: 0.875rem;">
+            Already have an account? <a href="{{ route('login') }}"
+                style="color: #8b5cf6; text-decoration: none; font-weight: 600;">Sign in</a>
+        </p>
+    </form>
 
     @push('scripts')
         <script>
@@ -389,17 +181,10 @@
                 }
             });
 
-            // Password confirmation validation
-            document.getElementById('password_confirmation').addEventListener('input', function () {
-                const password = document.getElementById('password').value;
-                const confirmation = this.value;
-
-                if (confirmation && password !== confirmation) {
-                    this.setCustomValidity('Passwords do not match');
-                } else {
-                    this.setCustomValidity('');
-                }
-            });
+            function togglePasswordVisibility(id) {
+                const input = document.getElementById(id);
+                input.type = input.type === 'password' ? 'text' : 'password';
+            }
         </script>
     @endpush
 @endsection

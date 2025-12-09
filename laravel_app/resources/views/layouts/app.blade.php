@@ -43,6 +43,102 @@
     <!-- CSRF Token -->
     <script>
         window.csrfToken = '{{ csrf_token() }}';
+
+        // Notification functions
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notificationDropdown');
+            dropdown.classList.toggle('active');
+            if (dropdown.classList.contains('active')) {
+                fetchNotifications();
+            }
+        }
+
+        function fetchNotifications() {
+            fetch('{{ route("notifications.unread") }}')
+                .then(res => res.json())
+                .then(data => {
+                    const badge = document.getElementById('notificationBadge');
+                    const list = document.getElementById('notificationList');
+
+                    if (data.unread_count > 0) {
+                        badge.textContent = data.unread_count > 9 ? '9+' : data.unread_count;
+                        badge.style.display = 'flex';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+
+                    if (data.notifications.length === 0) {
+                        list.innerHTML = '<div class="notification-empty">No new notifications</div>';
+                    } else {
+                        list.innerHTML = data.notifications.map(n => `
+                            <div class="notification-item unread" onclick="markAsRead(${n.id}, '${n.action_url || ''}')">
+                                <div class="notification-icon ${n.type}">
+                                    <i class="fas ${n.icon}"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">${n.title}</div>
+                                    <div class="notification-message">${n.message}</div>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                })
+                .catch(err => console.log('Notifications not available'));
+        }
+
+        function markAsRead(id, url) {
+            fetch(`/notifications/${id}/read`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': window.csrfToken,
+                    'Content-Type': 'application/json'
+                }
+            }).then(() => {
+                if (url) window.location.href = url;
+                else fetchNotifications();
+            });
+        }
+
+        function markAllAsRead() {
+            fetch('{{ route("notifications.markAllRead") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': window.csrfToken,
+                    'Content-Type': 'application/json'
+                }
+            }).then(() => fetchNotifications());
+        }
+
+        // Toast notification helper
+        function showToast(message, type = 'info') {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const icons = { success: 'fa-check', error: 'fa-times', warning: 'fa-exclamation', info: 'fa-info' };
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas ${icons[type]} toast-icon"></i><span class="toast-message">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 5000);
+        }
+
+        // Poll for new notifications every 30 seconds
+        @auth
+            setInterval(fetchNotifications, 30000);
+            document.addEventListener('DOMContentLoaded', fetchNotifications);
+        @endauth
+
+        // Close notification dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            const bell = document.getElementById('notificationBell');
+            const dropdown = document.getElementById('notificationDropdown');
+            if (bell && dropdown && !bell.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
     </script>
     @stack('scripts')
 </body>

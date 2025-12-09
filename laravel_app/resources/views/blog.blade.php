@@ -25,7 +25,7 @@
                         <h3>Fuel Prices Outlook for 2024</h3>
                         <p class="mb-4">What experts are predicting for diesel prices in the coming year and how to prepare.
                         </p>
-                        <a href="#" class="btn btn-outline btn-sm">Read More</a>
+                        <a href="{{ route('blog.show', 'fuel-prices-2024') }}" class="btn btn-outline btn-sm">Read More</a>
                     </div>
                 </div>
 
@@ -34,7 +34,8 @@
                         <div class="badge mb-2">Tips & Tricks</div>
                         <h3>Maximizing Fuel Efficiency</h3>
                         <p class="mb-4">Simple maintenance tips and driving habits that can save you thousands per year.</p>
-                        <a href="#" class="btn btn-outline btn-sm">Read More</a>
+                        <a href="{{ route('blog.show', 'maximizing-fuel-efficiency') }}" class="btn btn-outline btn-sm">Read
+                            More</a>
                     </div>
                 </div>
 
@@ -44,7 +45,8 @@
                         <h3>New DOT Regulations Explained</h3>
                         <p class="mb-4">Everything you need to know about the latest compliance changes affecting carriers.
                         </p>
-                        <a href="#" class="btn btn-outline btn-sm">Read More</a>
+                        <a href="{{ route('blog.show', 'dot-regulations-explained') }}" class="btn btn-outline btn-sm">Read
+                            More</a>
                     </div>
                 </div>
             </div>

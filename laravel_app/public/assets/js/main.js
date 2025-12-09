@@ -4,7 +4,7 @@
 function toggleMobileMenu() {
     const mobileNav = document.getElementById('mobileNav');
     const toggleBtn = document.querySelector('.mobile-menu-toggle');
-    
+
     if (mobileNav.classList.contains('active')) {
         mobileNav.classList.remove('active');
         toggleBtn.classList.remove('active');
@@ -15,10 +15,10 @@ function toggleMobileMenu() {
 }
 
 // Close mobile menu when clicking outside
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
     const mobileNav = document.getElementById('mobileNav');
     const toggleBtn = document.querySelector('.mobile-menu-toggle');
-    
+
     if (!mobileNav.contains(event.target) && !toggleBtn.contains(event.target)) {
         mobileNav.classList.remove('active');
         toggleBtn.classList.remove('active');
@@ -43,10 +43,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 function validateForm(form) {
     const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
     let isValid = true;
-    
+
     inputs.forEach(input => {
         const errorElement = input.parentNode.querySelector('.form-error');
-        
+
         if (!input.value.trim()) {
             isValid = false;
             input.classList.add('error');
@@ -59,7 +59,7 @@ function validateForm(form) {
                 errorElement.textContent = '';
             }
         }
-        
+
         // Email validation
         if (input.type === 'email' && input.value) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -71,7 +71,7 @@ function validateForm(form) {
                 }
             }
         }
-        
+
         // Password validation
         if (input.type === 'password' && input.value) {
             if (input.value.length < 6) {
@@ -83,7 +83,7 @@ function validateForm(form) {
             }
         }
     });
-    
+
     return isValid;
 }
 
@@ -91,7 +91,7 @@ function validateForm(form) {
 function togglePasswordVisibility(inputId) {
     const input = document.getElementById(inputId);
     const toggle = input.parentNode.querySelector('.password-toggle');
-    
+
     if (input.type === 'password') {
         input.type = 'text';
         toggle.innerHTML = '<i class="fas fa-eye-slash"></i>';
@@ -116,7 +116,7 @@ function setButtonLoading(button, loading = true) {
 // Show alert messages
 function showAlert(message, type = 'info', duration = 5000) {
     const alertContainer = document.getElementById('alert-container') || createAlertContainer();
-    
+
     const alert = document.createElement('div');
     alert.className = `alert alert-${type} fade-in`;
     alert.innerHTML = `
@@ -126,9 +126,9 @@ function showAlert(message, type = 'info', duration = 5000) {
             <i class="fas fa-times"></i>
         </button>
     `;
-    
+
     alertContainer.appendChild(alert);
-    
+
     // Auto remove after duration
     setTimeout(() => {
         if (alert.parentNode) {
@@ -174,17 +174,17 @@ async function makeRequest(url, options = {}) {
             'X-CSRF-Token': getCSRFToken()
         }
     };
-    
+
     const mergedOptions = { ...defaultOptions, ...options };
-    
+
     try {
         const response = await fetch(url, mergedOptions);
         const data = await response.json();
-        
+
         if (!response.ok) {
             throw new Error(data.message || 'Request failed');
         }
-        
+
         return data;
     } catch (error) {
         console.error('Request error:', error);
@@ -194,7 +194,7 @@ async function makeRequest(url, options = {}) {
 }
 
 // Auto-hide alerts after 5 seconds
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const alerts = document.querySelectorAll('.alert');
     alerts.forEach(alert => {
         setTimeout(() => {
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Initialize tooltips and other interactive elements
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Add fade-in animation to elements
     const animatedElements = document.querySelectorAll('.feature-card, .stat-item, .card');
     const observer = new IntersectionObserver((entries) => {
@@ -215,28 +215,28 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, { threshold: 0.1 });
-    
+
     animatedElements.forEach(el => observer.observe(el));
-    
+
     // Initialize user dropdown
     const userDropdowns = document.querySelectorAll('.user-dropdown');
     userDropdowns.forEach(dropdown => {
         const toggle = dropdown.querySelector('.user-dropdown-toggle');
         const menu = dropdown.querySelector('.user-dropdown-menu');
-        
+
         if (toggle && menu) {
             toggle.addEventListener('click', (e) => {
                 e.stopPropagation();
                 menu.classList.toggle('active');
             });
-            
+
             // Close dropdown when clicking outside
             document.addEventListener('click', () => {
                 menu.classList.remove('active');
             });
         }
     });
-    
+
     // Form auto-save (if needed)
     const forms = document.querySelectorAll('form[data-autosave]');
     forms.forEach(form => {
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 saveFormData(form);
             }, 1000));
         });
-        
+
         // Load saved data on page load
         loadFormData(form);
     });
@@ -314,7 +314,7 @@ function formatDate(date, options = {}) {
         month: 'long',
         day: 'numeric'
     };
-    
+
     return new Intl.DateTimeFormat('en-US', { ...defaultOptions, ...options }).format(new Date(date));
 }
 
@@ -327,3 +327,46 @@ window.makeRequest = makeRequest;
 window.copyToClipboard = copyToClipboard;
 window.formatCurrency = formatCurrency;
 window.formatDate = formatDate;
+
+// Modal functions
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+            modal.classList.add('active');
+        }, 10);
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }, 300);
+    }
+}
+
+// Close modal on backdrop click
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('modal')) {
+        const modalId = e.target.id;
+        closeModal(modalId);
+    }
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        const openModals = document.querySelectorAll('.modal.active');
+        openModals.forEach(modal => closeModal(modal.id));
+    }
+});
+
+// Export modal functions
+window.openModal = openModal;
+window.closeModal = closeModal;

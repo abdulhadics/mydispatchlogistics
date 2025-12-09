@@ -29,8 +29,11 @@ Route::post('/tracking', [TrackingController::class, 'track'])->name('tracking.t
 use App\Http\Controllers\DocumentsController;
 Route::get('/documents/{type}', [DocumentsController::class, 'view'])->name('documents.view');
 
+use App\Http\Controllers\BlogController;
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
 Route::view('/about', 'about')->name('about');
-Route::view('/blog', 'blog')->name('blog');
 
 // Carrier Setup Routes
 Route::get('/carrier-setup', [CarrierController::class, 'index'])->name('carrier-setup');
@@ -56,12 +59,24 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('vehicles', VehicleController::class);
     Route::resource('messages', MessageController::class);
     Route::resource('payments', PaymentController::class);
-    Route::resource('users', UserController::class); // Admin only usually
+    Route::resource('users', UserController::class);
+
+    // Notifications
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/unread', [App\Http\Controllers\NotificationController::class, 'getUnread'])->name('notifications.unread');
+    Route::post('/notifications/{notification}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
 
     // Settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
 
-    // Admin
-    Route::get('/admin/dashboard', [\App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
+    // Admin Routes
+    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
+    Route::get('/admin/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('admin.categories');
+    Route::post('/admin/categories', [App\Http\Controllers\CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::delete('/admin/categories/{category}', [App\Http\Controllers\CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+    Route::get('/admin/rules', [App\Http\Controllers\RuleController::class, 'index'])->name('admin.rules');
+    Route::post('/admin/rules', [App\Http\Controllers\RuleController::class, 'store'])->name('admin.rules.store');
+    Route::delete('/admin/rules/{rule}', [App\Http\Controllers\RuleController::class, 'destroy'])->name('admin.rules.destroy');
 });

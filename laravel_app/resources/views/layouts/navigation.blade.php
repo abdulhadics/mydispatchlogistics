@@ -26,6 +26,25 @@
 
         <div class="navbar-actions">
             @auth
+                <!-- Notification Bell -->
+                <div class="notification-bell" id="notificationBell">
+                    <button class="notification-toggle" onclick="toggleNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                    </button>
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-header">
+                            <h4>Notifications</h4>
+                            <button onclick="markAllAsRead()" class="mark-all-read">Mark all read</button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <div class="notification-empty">No new notifications</div>
+                        </div>
+                        <a href="{{ route('notifications.index') }}" class="notification-view-all">View All
+                            Notifications</a>
+                    </div>
+                </div>
+
                 <div class="user-menu user-dropdown">
                     <button class="user-dropdown-toggle">
                         <div class="user-info">
@@ -41,9 +60,17 @@
                         <a href="#" class="dropdown-link">
                             <i class="fas fa-user-gear"></i> Profile
                         </a>
-                        <a href="#" class="dropdown-link">
-                            <i class="fas fa-bell"></i> Notifications
-                        </a>
+                        @if(Auth::user()->role === 'admin')
+                            <a href="{{ route('admin.users') }}" class="dropdown-link">
+                                <i class="fas fa-users-cog"></i> Manage Users
+                            </a>
+                            <a href="{{ route('admin.categories') }}" class="dropdown-link">
+                                <i class="fas fa-folder-plus"></i> Categories
+                            </a>
+                            <a href="{{ route('admin.rules') }}" class="dropdown-link">
+                                <i class="fas fa-gavel"></i> Rules
+                            </a>
+                        @endif
                         <hr class="dropdown-divider">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

@@ -21,55 +21,67 @@
     <section class="features">
         <div class="container-narrow">
             <div class="features-grid">
-                <div class="feature-card">
+                <a href="{{ route('contact') }}?service=ftl" class="feature-card" style="text-decoration: none;">
                     <div class="feature-icon">
                         <i class="fas fa-truck-moving"></i>
                     </div>
                     <h3>Full Truckload (FTL)</h3>
                     <p>Dedicated truckload services ensuring your freight moves directly from pickup to delivery without
                         stops.</p>
-                </div>
+                    <span class="btn btn-outline btn-sm" style="margin-top: 1rem;">Get Quote <i
+                            class="fas fa-arrow-right"></i></span>
+                </a>
 
-                <div class="feature-card">
+                <a href="{{ route('contact') }}?service=ltl" class="feature-card" style="text-decoration: none;">
                     <div class="feature-icon">
                         <i class="fas fa-box-open"></i>
                     </div>
                     <h3>Less Than Truckload (LTL)</h3>
                     <p>Cost-effective solutions for smaller shipments that don't require a full trailer.</p>
-                </div>
+                    <span class="btn btn-outline btn-sm" style="margin-top: 1rem;">Get Quote <i
+                            class="fas fa-arrow-right"></i></span>
+                </a>
 
-                <div class="feature-card">
+                <a href="{{ route('contact') }}?service=refrigerated" class="feature-card" style="text-decoration: none;">
                     <div class="feature-icon">
                         <i class="fas fa-temperature-low"></i>
                     </div>
                     <h3>Refrigerated Transport</h3>
                     <p>Temperature-controlled shipping for perishable goods, ensuring freshness upon arrival.</p>
-                </div>
+                    <span class="btn btn-outline btn-sm" style="margin-top: 1rem;">Get Quote <i
+                            class="fas fa-arrow-right"></i></span>
+                </a>
 
-                <div class="feature-card">
+                <a href="{{ route('contact') }}?service=flatbed" class="feature-card" style="text-decoration: none;">
                     <div class="feature-icon">
                         <i class="fas fa-trailer"></i>
                     </div>
                     <h3>Flatbed Services</h3>
                     <p>Specialized equipment for oversized or irregularly shaped cargo that requires side or top loading.
                     </p>
-                </div>
+                    <span class="btn btn-outline btn-sm" style="margin-top: 1rem;">Get Quote <i
+                            class="fas fa-arrow-right"></i></span>
+                </a>
 
-                <div class="feature-card">
+                <a href="{{ route('contact') }}?service=expedited" class="feature-card" style="text-decoration: none;">
                     <div class="feature-icon">
                         <i class="fas fa-shipping-fast"></i>
                     </div>
                     <h3>Expedited Shipping</h3>
                     <p>Time-critical delivery services for urgent shipments that need to get there yesterday.</p>
-                </div>
+                    <span class="btn btn-outline btn-sm" style="margin-top: 1rem;">Get Quote <i
+                            class="fas fa-arrow-right"></i></span>
+                </a>
 
-                <div class="feature-card">
+                <a href="{{ route('contact') }}?service=factoring" class="feature-card" style="text-decoration: none;">
                     <div class="feature-icon">
                         <i class="fas fa-hand-holding-dollar"></i>
                     </div>
                     <h3>Factoring Assistance</h3>
                     <p>Help with cash flow management through our trusted factoring partners.</p>
-                </div>
+                    <span class="btn btn-outline btn-sm" style="margin-top: 1rem;">Learn More <i
+                            class="fas fa-arrow-right"></i></span>
+                </a>
             </div>
         </div>
     </section>
