@@ -21,6 +21,8 @@ class User extends Authenticatable
         'mc_number',
         'status',
         'last_login',
+        'otp_code',
+        'otp_expires_at',
     ];
 
     protected $hidden = [

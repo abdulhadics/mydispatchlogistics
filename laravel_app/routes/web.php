@@ -50,8 +50,15 @@ Route::get('/signup', [AuthController::class, 'showSignup'])->name('signup');
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// OTP Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/otp/verify', [AuthController::class, 'showVerifyOtp'])->name('otp.verify');
+    Route::post('/otp/verify', [AuthController::class, 'verifyOtp']);
+    Route::post('/otp/resend', [AuthController::class, 'resendOtp'])->name('otp.resend');
+});
+
 // Protected Routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified_otp'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Resources

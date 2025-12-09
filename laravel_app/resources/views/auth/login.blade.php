@@ -70,18 +70,7 @@
         </p>
     </form>
 
-    <!-- Demo Credentials (Optional, kept for convenience) -->
-    <div class="mt-8 pt-6 border-t border-gray-800"
-        style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
-        <p
-            style="color: #6b7280; font-size: 0.75rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
-            Demo Credentials</p>
-        <div style="display: grid; gap: 0.5rem; font-size: 0.875rem; color: #9ca3af;">
-            <div><span style="color: #e5e7eb; font-weight: 500;">Admin:</span> admin@logistics.com / admin123</div>
-            <div><span style="color: #e5e7eb; font-weight: 500;">Driver:</span> driver@example.com / driver123</div>
-            <div><span style="color: #e5e7eb; font-weight: 500;">Customer:</span> customer@example.com / customer123</div>
-        </div>
-    </div>
+
 
     <script>
         function togglePasswordVisibility(id) {
