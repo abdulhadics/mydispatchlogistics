@@ -18,35 +18,44 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         // Admin User
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@logistics.com',
-            'password' => bcrypt('admin123'),
-            'role' => 'admin',
-            'status' => 'active',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'fa23bcshadi@gmail.com'],
+            [
+                'name' => 'Admin User',
+                'password' => bcrypt('12345678'),
+                'role' => 'admin',
+                'status' => 'active',
+                'email_verified_at' => null,
+            ]
+        );
 
         // Driver User
-        User::create([
-            'name' => 'John Driver',
-            'email' => 'driver@example.com',
-            'password' => bcrypt('driver123'),
-            'role' => 'driver',
-            'status' => 'active',
-            'phone' => '555-0101',
-            'company' => 'Fast Trucking LLC',
-            'mc_number' => 'MC123456',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'driver@example.com'],
+            [
+                'name' => 'John Driver',
+                'password' => bcrypt('driver123'),
+                'role' => 'driver',
+                'status' => 'active',
+                'phone' => '555-0101',
+                'company' => 'Fast Trucking LLC',
+                'mc_number' => 'MC123456',
+                'email_verified_at' => null,
+            ]
+        );
 
         // Customer User
-        User::create([
-            'name' => 'Jane Customer',
-            'email' => 'customer@example.com',
-            'password' => bcrypt('customer123'),
-            'role' => 'customer',
-            'status' => 'active',
-            'phone' => '555-0202',
-            'company' => 'Retail Goods Inc.',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'customer@example.com'],
+            [
+                'name' => 'Jane Customer',
+                'password' => bcrypt('customer123'),
+                'role' => 'customer',
+                'status' => 'active',
+                'phone' => '555-0202',
+                'company' => 'Retail Goods Inc.',
+                'email_verified_at' => null,
+            ]
+        );
     }
 }

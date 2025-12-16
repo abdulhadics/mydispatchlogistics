@@ -16,6 +16,10 @@ Route::get('/', function () {
     return view('welcome'); // Or redirect to login
 })->name('home');
 
+Route::get('/test-1234', function () {
+    return 'Test Route Working';
+});
+
 Route::view('/services', 'services')->name('services');
 Route::view('/pricing', 'pricing')->name('pricing');
 Route::view('/fleet', 'fleet')->name('fleet');
@@ -87,3 +91,6 @@ Route::middleware(['auth', 'verified_otp'])->group(function () {
     Route::post('/admin/rules', [App\Http\Controllers\RuleController::class, 'store'])->name('admin.rules.store');
     Route::delete('/admin/rules/{rule}', [App\Http\Controllers\RuleController::class, 'destroy'])->name('admin.rules.destroy');
 });
+
+// CRUD Demo Route
+Route::resource('posts', \App\Http\Controllers\PostController::class);
